@@ -1,0 +1,2 @@
+mod mod_vhost_ldapx.so
+mod debian/vhost_ldapx.load

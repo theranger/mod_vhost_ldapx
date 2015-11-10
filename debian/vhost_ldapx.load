@@ -1,0 +1,2 @@
+LoadModule vhost_ldapx_module		/usr/lib/apache2/modules/mod_vhost_ldapx.so
+
