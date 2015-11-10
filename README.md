@@ -31,12 +31,13 @@ Following configuration directives are supported in `<VirtualHost />`
 Key					| Values		| Default	| Description
 :---				| :---:			| :---:		| :---
 `VHXEnable`			| `on`,`off`	| `off`   	| Enable virtual host lookups
-`VHXLdapUrl`		| ldap://localhost/dc=nodomain??sub?(apacheServerName=%v)	| - | LDAP server URL. Accepts LDAP-style URL-s with search scope and filters. `%v` will be substituted with a name of virtual host requested.
+`VHXLdapUrl`		| LDAP URL		| - | LDAP server URL. Accepts LDAP-style URL-s with search scope and filters. `%v` will be substituted with a name of virtual host requested.
 `VHXBindDN`			| 				|			| DN to use for binding
 `VHXBindPW`			|				|			| Password to use for binding
 `VHXDefaultUser`	| username		| 			| Default ITK user which to serve content under. Requires ITK MPM Apache module to be loaded.
 `VHXDefaultTTL`		| sec			| 300 		| Lifetime of LDAP cache entries.
 
+Typical LDAP URL looks something like this ldap://localhost/dc=nodomain??sub?(apacheServerName=%v)
 
 ```apache
 <VirtualHost *:80>
