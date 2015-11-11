@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 project(mod_vhost_ldapx)
 
-set(PROJECT_VERSION "0.1.0")
+set(PROJECT_VERSION "0.1.1")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-set(CPACK_PACKAGE_NAME "libapache2-mod-vhostx")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Apache LDAP virtual hosting module")
+set(CPACK_PACKAGE_NAME "libapache2-mod-vhost-ldapx")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Apache dynamic LDAP virtual hosting module")
 set(CPACK_PACKAGE_DESCRIPTION "Enable dynamic Apache virtual hosting using LDAP backend")
 set(CPACK_PACKAGE_CONTACT "The Ranger <ranger@risk.ee>")
 set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_SOURCE_DIR}/CPackConfig.cmake")

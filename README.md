@@ -22,7 +22,7 @@ Install Manually
 ----------------
 Download package from [Bintray repository](https://bintray.com/theranger/debian/mod_vhost_ldapx/_latestVersion) and install:
 ```
-sudo dpkg -i libapache2-mod-vhostx_X.Y.Z_amd64.deb
+sudo dpkg -i libapache2-mod-vhost-ldapx_X.Y.Z_amd64.deb
 ```
 
 Install using APT
@@ -35,7 +35,7 @@ wget -qO - https://bintray.com/user/downloadSubjectPublicKey?username=bintray | 
 Update and install:
 ```
 sudo apt-get update
-sudo apt-get install libapache2-mod-vhostx
+sudo apt-get install libapache2-mod-vhost-ldapx
 ```
 
 Configuration
