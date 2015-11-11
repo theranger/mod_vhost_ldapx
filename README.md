@@ -29,13 +29,13 @@ Install using APT
 -----------------
 Add Bintray repo and keys:
 ```
-echo "deb https://dl.bintray.com/theranger/debian jessie main" | sudo tee -a /etc/apt/sources.list
-wget -qO - https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+echo "deb http://dl.bintray.com/theranger/debian jessie main" | tee -a /etc/apt/sources.list
+wget -qO - https://bintray.com/user/downloadSubjectPublicKey?username=bintray | apt-key add -
 ```
 Update and install:
 ```
-sudo apt-get update
-sudo apt-get install libapache2-mod-vhost-ldapx
+apt-get update
+apt-get install libapache2-mod-vhost-ldapx
 ```
 
 Configuration
