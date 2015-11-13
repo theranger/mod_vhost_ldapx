@@ -32,7 +32,7 @@ int ldap_bind(const char *bindDN, char *bindPW) {
 	cred.bv_val = bindPW;
 	cred.bv_len = strlen(bindPW);
 
-	return ldap_sasl_bind(ld, bindDN, LDAP_SASL_SIMPLE, &cred, NULL, NULL, &msgid);
+	return ldap_sasl_bind_s(ld, bindDN, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
 }
 
 int ldap_search(const char *baseDN, int scope, const char *filter, char **attributes) {

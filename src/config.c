@@ -131,12 +131,13 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 		return -1;
 	}
 
+	int ret = 0;
 	char buf[MAX_BUF_LEN] = {0};
 	snprintf(buf, sizeof(buf), settings->ldap_url, r);
 
 	LDAPURLDesc *url_desc;
-	if(ldap_url_parse(buf, &url_desc) != 0) {
-		VHX_ERROR(r->server, "Failed parsing LDAP URL %s", buf);
+	if((ret = ldap_url_parse(buf, &url_desc)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Failed parsing LDAP URL %s: %s", buf, ldap_err2string(ret));
 		return -1;
 	}
 
@@ -146,13 +147,13 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 	else
 		apr_snprintf(buf, sizeof(buf), "%s://%s", url_desc->lud_scheme, url_desc->lud_host);
 
-	if(ldap_connect(buf) != 0) {
-		VHX_ERROR(r->server, "Could not connect to LDAP host %s", buf);
+	if((ret = ldap_connect(buf)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Could not connect to LDAP host %s: %s", buf, ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
 
-	if(ldap_bind(settings->ldap_binddn, settings->ldap_bindpw) != LDAP_SUCCESS) {
-		VHX_ERROR(r->server, "Could not bind to LDAP host");
+	if((ret = ldap_bind(settings->ldap_binddn, settings->ldap_bindpw)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Could not bind to LDAP host: %s", ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
 
@@ -160,8 +161,8 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 	snprintf(buf, sizeof(buf), url_desc->lud_filter ? url_desc->lud_filter : settings->default_filter, r);
 
 	VHX_DEBUG(r->server, "Searching dn=%s scope=%d, filter=%s", url_desc->lud_dn, url_desc->lud_scope, buf);
-	if(ldap_search(url_desc->lud_dn, url_desc->lud_scope, buf, attributes) != LDAP_SUCCESS) {
-		VHX_ERROR(r->server, "Could not make search query");
+	if((ret = ldap_search(url_desc->lud_dn, url_desc->lud_scope, buf, attributes)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Could not make search query: %s", ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
 
