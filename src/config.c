@@ -102,9 +102,10 @@ vhx_request_t * vhx_config_get(vhx_settings_t *settings, request_rec *r) {
 	v = apr_pcalloc(pool, sizeof(vhx_request_t));
 	if(v == NULL) return NULL;
 
-	if((vhx_config_ldap_search(settings, r, v)) < 0) return NULL;
+	// Init default values here
+	v->ttl = settings->default_ttl;
 
-	VHX_INFO(r->server, "LDAP entry for %s found", r->hostname);
+	if((vhx_config_ldap_search(settings, r, v)) < 0) return NULL;
 	vhx_cache_add(r->hostname, v);
 	return v;
 }
@@ -203,10 +204,7 @@ int vhx_config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request
 		values = vhx_ldap_get_values(LDAP_ATTR_TTL);
 		if(values) {
 			int ttl = atoi(values[0]->bv_val);
-			v->ttl = ttl ? ttl : settings->default_ttl;
-		}
-		else {
-			v->ttl = settings->default_ttl;
+			if(ttl > 0) v->ttl = ttl;
 		}
 
 		if(vhx_fill_user_info(v, uid, gid) != 0 && settings->default_user != NULL) {
