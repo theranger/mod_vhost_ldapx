@@ -1,2 +1,3 @@
 *
 !.gitignore
+!.slapd.conf

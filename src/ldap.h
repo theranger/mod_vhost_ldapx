@@ -27,5 +27,6 @@ struct berval ** vhx_ldap_get_values(const char *attribute);
 void vhx_ldap_disconnect();
 int vhx_ldap_set_version(int version);
 int vhx_ldap_set_logging(server_rec *srv);
+int vhx_ldap_count_entries();
 
 #endif //MOD_VHOST_LDAPX_LDAP_H

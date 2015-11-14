@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(mod_vhost_ldapx)
 
-set(PROJECT_VERSION "0.2.0")
+set(PROJECT_VERSION "0.2.1")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 set(CPACK_PACKAGE_NAME "libapache2-mod-vhost-ldapx")
@@ -27,3 +27,10 @@ if(APXS_BIN)
 else(APXS_BIN)
 	message(SEND_ERROR "Could not find APXS")
 endif(APXS_BIN)
+
+find_program(SLAPTEST_BIN NAMES slaptest)
+if(SLAPTEST_BIN)
+	file(COPY ${PROJECT_SOURCE_DIR}/doc/mod_vhost_ldapx.schema DESTINATION ${PROJECT_BINARY_DIR})
+	exec_program(${SLAPTEST_BIN} ARGS "-f ${PROJECT_SOURCE_DIR}/build/.slapd.conf -F ${PROJECT_BINARY_DIR}")
+	file(COPY ${PROJECT_BINARY_DIR}/cn=config/cn=schema/ DESTINATION ${PROJECT_SOURCE_DIR}/doc)
+endif(SLAPTEST_BIN)

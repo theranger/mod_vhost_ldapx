@@ -52,17 +52,19 @@ Key					| Values		| Default	| Description
 `VHXDefaultTTL`		| sec			| 300 		| Lifetime of LDAP cache entries.
 
 Typical LDAP URL looks something like this ldap://localhost/dc=nodomain??sub?(apacheServerName=%v)
+Note, that attribute list in LDAP URL can be left empty and is ignored by the module.
 
 ```apache
 <VirtualHost *:80>
 	<IfModule vhost_ldapx_module>
 		VHXEnable	On
-		VHXLdapUrl	ldap://localhost/dc=nodomain?cn,sn?sub?(apacheServerName=%v)
+		VHXLdapUrl	ldap://localhost/dc=nodomain??sub?(apacheServerName=%v)
 		VHXBindDN	cn=admin,dc=nodomain
 		VHXBindPW	************
 	</IfModule>
 </VirtualHost>
 ```
+Please see [docs](https://github.com/theranger/mod_vhost_ldapx/tree/dev/doc) folder about LDAP schema and objects configuration.
 
 Credits
 --------
