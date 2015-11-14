@@ -1,5 +1,5 @@
 # AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
-# CRC32 ce2cd097
+# CRC32 78d0740b
 dn: cn={0}mod_vhost_ldapx
 objectClass: olcSchemaConfig
 cn: {0}mod_vhost_ldapx
@@ -20,9 +20,9 @@ olcObjectClasses: {0}( 1.3.6.1.4.1.20971.10.2.1 NAME 'apacheConfiguration' D
  RY MUST ( apacheServerName $ apacheDocumentRoot ) MAY ( apacheServerAdmin $
   apacheTTL $ uid $ uidNumber $ gidNumber ) )
 structuralObjectClass: olcSchemaConfig
-entryUUID: 5649d87e-1f64-1035-9afb-2f6807b8f334
+entryUUID: cce75646-1f69-1035-9e1c-e71cb6c542d8
 creatorsName: cn=config
-createTimestamp: 20151114214224Z
-entryCSN: 20151114214224.552635Z#000000#000#000000
+createTimestamp: 20151114222131Z
+entryCSN: 20151114222131.039897Z#000000#000#000000
 modifiersName: cn=config
-modifyTimestamp: 20151114214224Z
+modifyTimestamp: 20151114222131Z
