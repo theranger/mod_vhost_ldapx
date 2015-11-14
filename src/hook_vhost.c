@@ -14,6 +14,7 @@
    limitations under the License.
 */
 
+#include <apr_strings.h>
 #include "mod_vhost_ldapx.h"
 #include "config.h"
 #include "log.h"
@@ -24,7 +25,7 @@
 int vhx_hook_vhost(request_rec *r) {
 	vhx_settings_t *settings = (vhx_settings_t *) ap_get_module_config(r->server->module_config, &vhost_ldapx_module);
 	if (!settings->enable) {
-		VHX_INFO(r->server, "VHX Disabled %s", r->hostname);
+		VHX_INFO(r->server, "VirtualHost %s VHX disabled", r->hostname);
 		return DECLINED;
 	}
 
@@ -35,17 +36,17 @@ int vhx_hook_vhost(request_rec *r) {
 	}
 
 	if(v->dn == NULL) {
-		VHX_INFO(r->server, "VHX Not Found %s", r->hostname);
+		VHX_INFO(r->server, "VirtualHost %s not found", r->hostname);
 		return DECLINED;
 	}
 
 	if(v->document_root == NULL) {
-		VHX_INFO(r->server, "VHX Unconfigured %s", r->hostname);
+		VHX_INFO(r->server, "VirtualHost %s not configured", r->hostname);
 		return DECLINED;
 	}
 
-	ap_set_document_root(r, v->document_root);
-	VHX_INFO(r->server, "VHX Found %s, documentRoot = %s", v->dn, v->document_root);
+	VHX_INFO(r->server, "VirtualHost %s found, documentRoot=%s, serverAdmin=%s", r->hostname, v->document_root, v->server_admin?v->server_admin:"<>");
+	if(v->server_admin) r->server->server_admin = apr_pstrdup(r->pool, v->server_admin);
 
 	return DECLINED;
 }
