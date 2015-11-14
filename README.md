@@ -64,6 +64,7 @@ Note, that attribute list in LDAP URL can be left empty and is ignored by the mo
 	</IfModule>
 </VirtualHost>
 ```
+Please see [docs](docs) folder about LDAP schema and objects configuration.
 
 Credits
 --------

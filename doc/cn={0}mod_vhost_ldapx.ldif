@@ -1,0 +1,28 @@
+# AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
+# CRC32 ce2cd097
+dn: cn={0}mod_vhost_ldapx
+objectClass: olcSchemaConfig
+cn: {0}mod_vhost_ldapx
+olcAttributeTypes: {0}( 1.3.6.1.4.1.20971.10.1.1 NAME 'apacheServerName' DES
+ C 'Apache ServerName' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsM
+ atch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} SINGLE-VALUE )
+olcAttributeTypes: {1}( 1.3.6.1.4.1.20971.10.1.2 NAME 'apacheDocumentRoot' D
+ ESC 'Apache DocumentRoot' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstri
+ ngsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} SINGLE-VALUE )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.20971.10.1.3 NAME 'apacheServerAdmin' DE
+ SC 'Apache ServerAdmin' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstring
+ sMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} SINGLE-VALUE )
+olcAttributeTypes: {3}( 1.3.6.1.4.1.20971.10.1.4 NAME 'apacheTTL' DESC 'How 
+ long entry is cached (sec)' EQUALITY integerMatch SYNTAX 1.3.6.1.4.1.1466.1
+ 15.121.1.27 )
+olcObjectClasses: {0}( 1.3.6.1.4.1.20971.10.2.1 NAME 'apacheConfiguration' D
+ ESC 'mod_vhost_ldapx Apache dynamic virtual hosting schema' SUP top AUXILIA
+ RY MUST ( apacheServerName $ apacheDocumentRoot ) MAY ( apacheServerAdmin $
+  apacheTTL $ uid $ uidNumber $ gidNumber ) )
+structuralObjectClass: olcSchemaConfig
+entryUUID: 5649d87e-1f64-1035-9afb-2f6807b8f334
+creatorsName: cn=config
+createTimestamp: 20151114214224Z
+entryCSN: 20151114214224.552635Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20151114214224Z

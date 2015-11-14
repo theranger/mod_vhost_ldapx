@@ -31,8 +31,8 @@
 #define LDAP_ATTR_SERVER_NAME		"apacheServerName"
 #define LDAP_ATTR_DOCUMENT_ROOT		"apacheDocumentRoot"
 #define LDAP_ATTR_SERVER_ADMIN		"apacheServerAdmin"
-#define LDAP_ATTR_UID				"apacheUidNumber"
-#define LDAP_ATTR_GID				"apacheGidNumber"
+#define LDAP_ATTR_UID				"uidNumber"
+#define LDAP_ATTR_GID				"gidNumber"
 #define LDAP_ATTR_USER				"apacheUser"
 #define LDAP_ATTR_TTL				"apacheTTL"
 
