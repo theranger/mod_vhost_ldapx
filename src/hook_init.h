@@ -19,6 +19,6 @@
 
 #include <httpd.h>
 
-void hook_init(apr_pool_t * p, server_rec * s);
+void vhx_hook_init(apr_pool_t * p, server_rec * s);
 
 #endif //MOD_VHOST_LDAPX_HOOK_INIT_H

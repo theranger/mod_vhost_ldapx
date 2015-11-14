@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(mod_vhost_ldapx)
 
-set(PROJECT_VERSION "0.1.1")
+set(PROJECT_VERSION "0.2.0")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 set(CPACK_PACKAGE_NAME "libapache2-mod-vhost-ldapx")
@@ -17,7 +17,7 @@ if(APXS_BIN)
 	exec_program(${APXS_BIN} ARGS "-q APR_INCLUDEDIR" OUTPUT_VARIABLE APXS_APR_INCLUDEDIR)
 	exec_program(${APXS_BIN} ARGS "-q LDFLAGS" OUTPUT_VARIABLE APXS_LDFLAGS)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${APXS_C_FLAGS} -I${APXS_APACHE_INCLUDEDIR} -I${APXS_APR_INCLUDEDIR}")
-	set(CMAKE_SHARED_LINKER_FLAGS "-lldap")
+	set(CMAKE_SHARED_LINKER_FLAGS "-lldap -llber")
 	add_library(${CMAKE_PROJECT_NAME} SHARED src/ldap.c src/cache.c src/hook_itk.c src/hook_vhost.c src/hook_init.c src/config.c src/settings.c src/mod_vhost_ldapx.c)
 	set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PREFIX "")
 	install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION /usr/lib/apache2/modules)

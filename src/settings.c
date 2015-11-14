@@ -29,17 +29,17 @@ typedef enum {
 	VHX_DEFAULT_TTL,
 } vhx_config_v;
 
-const command_rec settings[] = {
-	AP_INIT_FLAG("VHXEnable", set_flag, (void *)VHX_ENABLE, RSRC_CONF, "Enable VHX module lookups"),
-	AP_INIT_TAKE1("VHXLdapUrl", set_char, (void *)VHX_LDAP_URL, RSRC_CONF, "LDAP server URL"),
-	AP_INIT_TAKE1("VHXBindDN", set_char, (void *)VHX_BIND_DN, RSRC_CONF, "Bind DN"),
-	AP_INIT_TAKE1("VHXBindPW", set_char, (void *)VHX_BIND_PW, RSRC_CONF, "Bind password"),
-	AP_INIT_TAKE1("VHXDefaultUser", set_char, (void *)VHX_BIND_PW, RSRC_CONF, "Bind password"),
-	AP_INIT_TAKE1("VHXDefaultTTL", set_char, (void *)VHX_DEFAULT_TTL, RSRC_CONF, "Default TTL for cache"),
+const command_rec vhx_settings[] = {
+	AP_INIT_FLAG("VHXEnable", vhx_set_flag, (void *)VHX_ENABLE, RSRC_CONF, "Enable VHX module lookups"),
+	AP_INIT_TAKE1("VHXLdapUrl", vhx_set_char, (void *)VHX_LDAP_URL, RSRC_CONF, "LDAP server URL"),
+	AP_INIT_TAKE1("VHXBindDN", vhx_set_char, (void *)VHX_BIND_DN, RSRC_CONF, "Bind DN"),
+	AP_INIT_TAKE1("VHXBindPW", vhx_set_char, (void *)VHX_BIND_PW, RSRC_CONF, "Bind password"),
+	AP_INIT_TAKE1("VHXDefaultUser", vhx_set_char, (void *)VHX_BIND_PW, RSRC_CONF, "Bind password"),
+	AP_INIT_TAKE1("VHXDefaultTTL", vhx_set_char, (void *)VHX_DEFAULT_TTL, RSRC_CONF, "Default TTL for cache"),
 	{ NULL }
 };
 
-const char * set_char(cmd_parms *cmd, void *mconfig, const char *arg) {
+const char * vhx_set_char(cmd_parms *cmd, void *mconfig, const char *arg) {
 	vhx_settings_t *settings = (vhx_settings_t *)ap_get_module_config(cmd->server->module_config, &vhost_ldapx_module);
 
 	switch((vhx_config_v)cmd->info) {
@@ -68,7 +68,7 @@ const char * set_char(cmd_parms *cmd, void *mconfig, const char *arg) {
 	}
 }
 
-const char * set_flag(cmd_parms *cmd, void *mconfig, int on) {
+const char * vhx_set_flag(cmd_parms *cmd, void *mconfig, int on) {
 	vhx_settings_t *settings = (vhx_settings_t *)ap_get_module_config(cmd->server->module_config, &vhost_ldapx_module);
 
 	switch((vhx_config_v)cmd->info) {
@@ -96,7 +96,7 @@ static char *trim(char *str) {
 	return str;
 }
 
-int print_host_info(const struct printf_info *info, size_t n, int *argtypes, int *size) {
+int vhx_print_host_info(const struct printf_info *info, size_t n, int *argtypes, int *size) {
 	if(n > 0) {
 		argtypes[0] = PA_POINTER;
 		size[0] = sizeof(request_rec *);
@@ -104,7 +104,7 @@ int print_host_info(const struct printf_info *info, size_t n, int *argtypes, int
 	return 1;
 }
 
-int print_host(FILE *stream, const struct printf_info *info, const void *const *args) {
+int vhx_print_host(FILE *stream, const struct printf_info *info, const void *const *args) {
 	const request_rec *r = *(request_rec **)args[0];
 	return fprintf(stream, "%s", r->hostname);
 }

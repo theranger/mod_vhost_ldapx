@@ -18,6 +18,6 @@
 
 #include "hook_init.h"
 
-void hook_init(apr_pool_t * p, server_rec * s) {
-	cache_init(p);
+void vhx_hook_init(apr_pool_t * p, server_rec * s) {
+	vhx_cache_init(p);
 }

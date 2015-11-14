@@ -28,28 +28,28 @@
 #define VHX_DEFAULT_FILTER		"(apacheServerName=%v)"
 #define VHX_DEFAULT_TTL_SEC		300
 
-static void *create_settings(apr_pool_t *p, server_rec *s);
-static void *merge_settings(apr_pool_t *p, void *parent_settings, void *child_settings);
-static void register_hooks(apr_pool_t *p);
+static void *vhx_create_settings(apr_pool_t *p, server_rec *s);
+static void *vhx_merge_settings(apr_pool_t *p, void *parent_settings, void *child_settings);
+static void vhx_register_hooks(apr_pool_t *p);
 
 AP_MODULE_DECLARE_DATA module vhost_ldapx_module = {
 		STANDARD20_MODULE_STUFF,
 		NULL,
 		NULL,
-		create_settings,
-		merge_settings,
-		settings,
-		register_hooks
+		vhx_create_settings,
+		vhx_merge_settings,
+		vhx_settings,
+		vhx_register_hooks
 };
 
-static void * create_settings(apr_pool_t *p, server_rec *s) {
+static void * vhx_create_settings(apr_pool_t *p, server_rec *s) {
 	vhx_settings_t *vhr = (vhx_settings_t *) apr_pcalloc(p, sizeof(vhx_settings_t));
 	vhr->default_filter = VHX_DEFAULT_FILTER;
 	vhr->default_ttl = VHX_DEFAULT_TTL_SEC;
 	return vhr;
 }
 
-static void * merge_settings(apr_pool_t *p, void *parent_settings, void *child_settings) {
+static void * vhx_merge_settings(apr_pool_t *p, void *parent_settings, void *child_settings) {
 	vhx_settings_t *parent = (vhx_settings_t *) parent_settings;
 	vhx_settings_t *child = (vhx_settings_t *) child_settings;
 	vhx_settings_t *conf = (vhx_settings_t *) apr_pcalloc(p, sizeof(vhx_settings_t));
@@ -65,11 +65,11 @@ static void * merge_settings(apr_pool_t *p, void *parent_settings, void *child_s
 	return conf;
 }
 
-static void register_hooks(apr_pool_t *p) {
-	ap_hook_translate_name(hook_vhost, NULL, NULL, APR_HOOK_FIRST);
-	ap_hook_child_init(hook_init, NULL, NULL, APR_HOOK_MIDDLE);
-	ap_hook_post_read_request(hook_itk, NULL, NULL, APR_HOOK_REALLY_FIRST);
+static void vhx_register_hooks(apr_pool_t *p) {
+	ap_hook_translate_name(vhx_hook_vhost, NULL, NULL, APR_HOOK_FIRST);
+	ap_hook_child_init(vhx_hook_init, NULL, NULL, APR_HOOK_MIDDLE);
+	ap_hook_post_read_request(vhx_hook_itk, NULL, NULL, APR_HOOK_REALLY_FIRST);
 
 	// %v tries to locate hostname from request_rec_t
-	register_printf_specifier('v', print_host, print_host_info);
+	register_printf_specifier('v', vhx_print_host, vhx_print_host_info);
 }

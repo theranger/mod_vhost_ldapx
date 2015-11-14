@@ -19,6 +19,6 @@
 
 #include <httpd.h>
 
-int hook_vhost(request_rec *r);
+int vhx_hook_vhost(request_rec *r);
 
 #endif //MOD_VHOST_LDAPX_HOOK_VHOST_H

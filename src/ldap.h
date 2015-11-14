@@ -19,11 +19,13 @@
 
 #include <httpd.h>
 
-int ldap_connect(const char *url);
-int ldap_bind(const char *bindDN, char *bindPW);
-int ldap_search(const char *baseDN, int scope, const char *filter, char **attributes);
-const char * ldap_get_entry();
-struct berval ** ldap_get_values(const char *attribute);
-void ldap_disconnect();
+int vhx_ldap_connect(const char *url);
+int vhx_ldap_bind(const char *bindDN, char *bindPW);
+int vhx_ldap_search(const char *baseDN, int scope, const char *filter, char **attributes);
+const char * vhx_ldap_get_entry();
+struct berval ** vhx_ldap_get_values(const char *attribute);
+void vhx_ldap_disconnect();
+int vhx_ldap_set_version(int version);
+int vhx_ldap_set_logging(server_rec *srv);
 
 #endif //MOD_VHOST_LDAPX_LDAP_H

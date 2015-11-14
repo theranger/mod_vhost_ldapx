@@ -20,8 +20,6 @@
 #ifndef MOD_VHOST_LDAPX_H
 #define MOD_VHOST_LDAPX_H
 
-#define VH_NAME			"mod_vhost_ldapx"
-#define VH_VERSION		"1.0"
 #define CORE_PRIVATE					// Required for setting ap_document_root
 
 AP_MODULE_DECLARE_DATA module vhost_ldapx_module;
