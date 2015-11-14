@@ -33,7 +33,7 @@
 #define LDAP_ATTR_SERVER_ADMIN		"apacheServerAdmin"
 #define LDAP_ATTR_UID				"uidNumber"
 #define LDAP_ATTR_GID				"gidNumber"
-#define LDAP_ATTR_USER				"apacheUser"
+#define LDAP_ATTR_USER				"uid"
 #define LDAP_ATTR_TTL				"apacheTTL"
 
 static char *attributes[] = {
