@@ -65,6 +65,11 @@ int vhx_ldap_set_version(int version) {
 	return ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &version);
 }
 
+int vhx_ldap_count_entries() {
+	if(ld == NULL || msg == NULL) return 0;
+	return ldap_count_entries(ld, msg);
+}
+
 const char * vhx_ldap_get_entry() {
 	if(values != NULL) {
 		ldap_value_free_len(values);

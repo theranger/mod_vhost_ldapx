@@ -177,6 +177,8 @@ int vhx_config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request
 		goto err_free_urldesc;
 	}
 
+	VHX_DEBUG(r->server, "Query entry count=%d", vhx_ldap_count_entries());
+
 	const char *dn;
 	struct berval **values;
 
