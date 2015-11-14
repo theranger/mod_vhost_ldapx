@@ -46,6 +46,7 @@ int vhx_hook_vhost(request_rec *r) {
 	}
 
 	VHX_INFO(r->server, "VirtualHost %s found, documentRoot=%s, serverAdmin=%s", r->hostname, v->document_root, v->server_admin?v->server_admin:"<>");
+	ap_set_document_root(r, v->document_root);
 	if(v->server_admin) r->server->server_admin = apr_pstrdup(r->pool, v->server_admin);
 
 	return DECLINED;
