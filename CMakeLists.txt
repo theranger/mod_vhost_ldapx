@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(mod_vhost_ldapx)
 
-set(PROJECT_VERSION "0.1.1")
+set(PROJECT_VERSION "0.2.0")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 set(CPACK_PACKAGE_NAME "libapache2-mod-vhost-ldapx")
