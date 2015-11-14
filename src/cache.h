@@ -19,12 +19,12 @@
 
 #include "config.h"
 
-void cache_init(apr_pool_t *p);
-vhx_request_t * cache_search(const char *key);
-void cache_add(const char *key, vhx_request_t *v);
-int cache_count();
-apr_pool_t * cache_get_pool();
-apr_time_t cached_entry_timer(const vhx_request_t *v);
+void vhx_cache_init(apr_pool_t *p);
+vhx_request_t * vhx_cache_search(const char *key);
+void vhx_cache_add(const char *key, vhx_request_t *v);
+int vhx_cache_count();
+apr_pool_t * vhx_cache_get_pool();
+apr_time_t vhx_cached_entry_timer(const vhx_request_t *v);
 
 
 #endif //MOD_VHOST_LDAPX_CACHE_H

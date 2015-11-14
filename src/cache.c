@@ -22,12 +22,12 @@
 
 static apr_hash_t *cache = NULL;
 
-apr_status_t cache_destroy(void *data){
+apr_status_t vhx_cache_destroy(void *data){
 	cache = NULL;
 	return APR_SUCCESS;
 }
 
-void cache_init(apr_pool_t *p) {
+void vhx_cache_init(apr_pool_t *p) {
 	if(cache != NULL) return;
 
 	apr_pool_t *pool;
@@ -37,11 +37,11 @@ void cache_init(apr_pool_t *p) {
 	cache = apr_hash_make(pool);
 }
 
-apr_pool_t * cache_get_pool() {
+apr_pool_t * vhx_cache_get_pool() {
 	return apr_hash_pool_get(cache);
 }
 
-vhx_request_t * cache_search(const char *key) {
+vhx_request_t * vhx_cache_search(const char *key) {
 	if(cache == NULL) return NULL;
 
 	vhx_request_t *v = apr_hash_get(cache, key, APR_HASH_KEY_STRING);
@@ -50,15 +50,15 @@ vhx_request_t * cache_search(const char *key) {
 	return v;
 }
 
-apr_time_t cached_entry_timer(const vhx_request_t *v) {
+apr_time_t vhx_cached_entry_timer(const vhx_request_t *v) {
 	return apr_time_sec(v->timestamp + apr_time_from_sec(v->ttl) - apr_time_now());
 }
 
-int cache_count() {
+int vhx_cache_count() {
 	return apr_hash_count(cache);
 }
 
-void cache_add(const char *key, vhx_request_t *v) {
+void vhx_cache_add(const char *key, vhx_request_t *v) {
 	if(cache == NULL) return;
 	if(v == NULL || key == NULL) return;
 

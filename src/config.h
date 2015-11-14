@@ -32,7 +32,7 @@ typedef struct {
 	apr_time_t	timestamp;			// When entry was stored in cache
 } vhx_request_t;
 
-vhx_request_t * config_get(vhx_settings_t *settings, request_rec *r);
-int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *v);
+vhx_request_t * vhx_config_get(vhx_settings_t *settings, request_rec *r);
+int vhx_config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *v);
 
 #endif //MOD_VHOST_LDAPX_CONFIG_H

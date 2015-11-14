@@ -47,8 +47,8 @@ static char *attributes[] = {
 		NULL
 };
 
-int fill_user_info(vhx_request_t *v, uid_t uid, gid_t gid) {
-	apr_pool_t *pool = cache_get_pool();
+static int vhx_fill_user_info(vhx_request_t *v, uid_t uid, gid_t gid) {
+	apr_pool_t *pool = vhx_cache_get_pool();
 	if(pool == NULL) return -1;
 
 	if(v->user != NULL) {
@@ -76,46 +76,46 @@ int fill_user_info(vhx_request_t *v, uid_t uid, gid_t gid) {
 	return 0;
 }
 
-vhx_request_t * config_get(vhx_settings_t *settings, request_rec *r) {
+vhx_request_t * vhx_config_get(vhx_settings_t *settings, request_rec *r) {
 
 	vhx_request_t *v;
-	if((v = cache_search(r->hostname)) != NULL) {
-		apr_time_t timer = cached_entry_timer(v);
+	if((v = vhx_cache_search(r->hostname)) != NULL) {
+		apr_time_t timer = vhx_cached_entry_timer(v);
 		if(timer > 0) {
 			VHX_INFO(r->server, "CACHED entry for %s found, TTL=%ld/%d", r->hostname, timer, v->ttl);
 			return v;
 		}
 
-		if(config_ldap_search(settings, r, v) < 0) {
+		if(vhx_config_ldap_search(settings, r, v) < 0) {
 			VHX_INFO(r->server, "STALE cached entry for %s found, TTL=%ld/%d", r->hostname, timer, v->ttl);
 			return v;
 		}
 
 		VHX_INFO(r->server, "REFRESHED entry for %s, TTL=%ld/%d", r->hostname, timer, v->ttl);
-		cache_add(r->hostname, v);
+		vhx_cache_add(r->hostname, v);
 		return v;
 	}
 
-	apr_pool_t *pool = cache_get_pool();
+	apr_pool_t *pool = vhx_cache_get_pool();
 	if(pool == NULL) return NULL;
 
 	v = apr_pcalloc(pool, sizeof(vhx_request_t));
 	if(v == NULL) return NULL;
 
-	if((config_ldap_search(settings, r, v)) < 0) return NULL;
+	if((vhx_config_ldap_search(settings, r, v)) < 0) return NULL;
 
 	VHX_INFO(r->server, "LDAP entry for %s found", r->hostname);
-	cache_add(r->hostname, v);
+	vhx_cache_add(r->hostname, v);
 	return v;
 }
 
-int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *v) {
+int vhx_config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *v) {
 	if(v == NULL) {
 		VHX_DEBUG(r->server, "Request container uninitialized");
 		return -1;
 	}
 
-	apr_pool_t *pool = cache_get_pool();
+	apr_pool_t *pool = vhx_cache_get_pool();
 	if(pool == NULL) {
 		VHX_DEBUG(r->server, "Cache pool not set");
 		return -1;
@@ -147,13 +147,23 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 	else
 		apr_snprintf(buf, sizeof(buf), "%s://%s", url_desc->lud_scheme, url_desc->lud_host);
 
-	if((ret = ldap_connect(buf)) != LDAP_SUCCESS) {
+	if((ret = vhx_ldap_connect(buf)) != LDAP_SUCCESS) {
 		VHX_ERROR(r->server, "Could not connect to LDAP host %s: %s", buf, ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
 
-	if((ret = ldap_bind(settings->ldap_binddn, settings->ldap_bindpw)) != LDAP_SUCCESS) {
-		VHX_ERROR(r->server, "Could not bind to LDAP host: %s", ldap_err2string(ret));
+	if(r->server->log.level > LOG_DEBUG && (ret = vhx_ldap_set_logging(r->server)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Failed set logging to %d: %s", r->server->log.level, ldap_err2string(ret));
+		goto err_free_urldesc;
+	}
+
+	if((ret = vhx_ldap_set_version(LDAP_VERSION3)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Failed setting LDAP protocol version: %s", ldap_err2string(ret));
+		goto err_free_urldesc;
+	}
+
+	if((ret = vhx_ldap_bind(settings->ldap_binddn, settings->ldap_bindpw)) != LDAP_SUCCESS) {
+		VHX_ERROR(r->server, "Could not bind to LDAP host %s: %s", buf, ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
 
@@ -161,7 +171,7 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 	snprintf(buf, sizeof(buf), url_desc->lud_filter ? url_desc->lud_filter : settings->default_filter, r);
 
 	VHX_DEBUG(r->server, "Searching dn=%s scope=%d, filter=%s", url_desc->lud_dn, url_desc->lud_scope, buf);
-	if((ret = ldap_search(url_desc->lud_dn, url_desc->lud_scope, buf, attributes)) != LDAP_SUCCESS) {
+	if((ret = vhx_ldap_search(url_desc->lud_dn, url_desc->lud_scope, buf, attributes)) != LDAP_SUCCESS) {
 		VHX_ERROR(r->server, "Could not make search query: %s", ldap_err2string(ret));
 		goto err_free_urldesc;
 	}
@@ -169,28 +179,28 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 	const char *dn;
 	struct berval **values;
 
-	while((dn = ldap_get_entry()) != NULL) {
+	while((dn = vhx_ldap_get_entry()) != NULL) {
 		v->dn = apr_pstrdup(pool, dn);
 
-		values = ldap_get_values(LDAP_ATTR_SERVER_NAME);
+		values = vhx_ldap_get_values(LDAP_ATTR_SERVER_NAME);
 		if(values) v->server_name = apr_pstrdup(pool, values[0]->bv_val);
 
-		values = ldap_get_values(LDAP_ATTR_SERVER_ADMIN);
+		values = vhx_ldap_get_values(LDAP_ATTR_SERVER_ADMIN);
 		if(values) v->server_admin = apr_pstrdup(pool, values[0]->bv_val);
 
-		values = ldap_get_values(LDAP_ATTR_DOCUMENT_ROOT);
+		values = vhx_ldap_get_values(LDAP_ATTR_DOCUMENT_ROOT);
 		if(values) v->document_root = apr_pstrdup(pool, values[0]->bv_val);
 
-		values = ldap_get_values(LDAP_ATTR_USER);
+		values = vhx_ldap_get_values(LDAP_ATTR_USER);
 		if(values) v->user = apr_pstrdup(pool, values[0]->bv_val);
 
-		values = ldap_get_values(LDAP_ATTR_UID);
+		values = vhx_ldap_get_values(LDAP_ATTR_UID);
 		uid_t uid = (uid_t) (values ? atoi(values[0]->bv_val) : 0);
 
-		values = ldap_get_values(LDAP_ATTR_GID);
+		values = vhx_ldap_get_values(LDAP_ATTR_GID);
 		gid_t gid = (gid_t) (values ? atoi(values[0]->bv_val) : 0);
 
-		values = ldap_get_values(LDAP_ATTR_TTL);
+		values = vhx_ldap_get_values(LDAP_ATTR_TTL);
 		if(values) {
 			int ttl = atoi(values[0]->bv_val);
 			v->ttl = ttl ? ttl : settings->default_ttl;
@@ -199,15 +209,15 @@ int config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request_t *
 			v->ttl = settings->default_ttl;
 		}
 
-		if(fill_user_info(v, uid, gid) != 0 && settings->default_user != NULL) {
+		if(vhx_fill_user_info(v, uid, gid) != 0 && settings->default_user != NULL) {
 			v->user = apr_pstrdup(pool, values[0]->bv_val);
-			fill_user_info(v, uid, gid);
+			vhx_fill_user_info(v, uid, gid);
 		}
 
 		break;
 	}
 
-	ldap_disconnect();
+	vhx_ldap_disconnect();
 	ldap_free_urldesc(url_desc);
 	return 1;
 

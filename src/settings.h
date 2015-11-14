@@ -21,15 +21,14 @@
 #include <httpd.h>
 #include <http_config.h>
 
-static char *trim(char *str);
-const char * set_char(cmd_parms *parms, void *mconfig, const char *w);
-const char * set_flag(cmd_parms *parms, void *mconfig, int on);
+const char * vhx_set_char(cmd_parms *parms, void *mconfig, const char *w);
+const char * vhx_set_flag(cmd_parms *parms, void *mconfig, int on);
 
 
-int print_host_info(const struct printf_info *info, size_t n, int *argtypes, int *size);
-int print_host(FILE *stream, const struct printf_info *info,const void *const *args);
+int vhx_print_host_info(const struct printf_info *info, size_t n, int *argtypes, int *size);
+int vhx_print_host(FILE *stream, const struct printf_info *info,const void *const *args);
 
-extern const command_rec settings[];
+extern const command_rec vhx_settings[];
 
 typedef struct {
 	uint8_t		enable;				// enable or disable the module

@@ -30,6 +30,6 @@ typedef struct {
 	ap_expr_info_t *	gid_expr;
 } itk_per_dir_conf;
 
-int hook_itk(request_rec *r);
+int vhx_hook_itk(request_rec *r);
 
 #endif //MOD_VHOST_LDAPX_HOOK_ITK_H

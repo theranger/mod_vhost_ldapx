@@ -21,14 +21,14 @@
 #include "hook_vhost.h"
 
 
-int hook_vhost(request_rec *r) {
+int vhx_hook_vhost(request_rec *r) {
 	vhx_settings_t *settings = (vhx_settings_t *) ap_get_module_config(r->server->module_config, &vhost_ldapx_module);
 	if (!settings->enable) {
 		VHX_INFO(r->server, "VHX Disabled %s", r->hostname);
 		return DECLINED;
 	}
 
-	vhx_request_t *v = config_get(settings, r);
+	vhx_request_t *v = vhx_config_get(settings, r);
 	if(v == NULL) {
 		VHX_ERROR(r->server, "Module configuration error");
 		return  HTTP_INTERNAL_SERVER_ERROR;
