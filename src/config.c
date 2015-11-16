@@ -33,7 +33,8 @@
 #define LDAP_ATTR_SERVER_ADMIN		"apacheServerAdmin"
 #define LDAP_ATTR_UID				"uidNumber"
 #define LDAP_ATTR_GID				"gidNumber"
-#define LDAP_ATTR_USER				"uid"
+#define LDAP_ATTR_ACCOUNT			"uid"
+#define LDAP_ATTR_USER				"apacheUser"
 #define LDAP_ATTR_TTL				"apacheTTL"
 
 static char *attributes[] = {
@@ -42,6 +43,7 @@ static char *attributes[] = {
 		LDAP_ATTR_SERVER_ADMIN,
 		LDAP_ATTR_UID,
 		LDAP_ATTR_GID,
+		LDAP_ATTR_ACCOUNT,
 		LDAP_ATTR_USER,
 		LDAP_ATTR_TTL,
 		NULL
@@ -194,7 +196,8 @@ int vhx_config_ldap_search(vhx_settings_t *settings, request_rec *r, vhx_request
 		values = vhx_ldap_get_values(LDAP_ATTR_DOCUMENT_ROOT);
 		if(values) v->document_root = apr_pstrdup(pool, values[0]->bv_val);
 
-		values = vhx_ldap_get_values(LDAP_ATTR_USER);
+		values = vhx_ldap_get_values(LDAP_ATTR_ACCOUNT);
+		if(!values || !values[0]->bv_val) values = vhx_ldap_get_values(LDAP_ATTR_USER);
 		if(values) v->user = apr_pstrdup(pool, values[0]->bv_val);
 
 		values = vhx_ldap_get_values(LDAP_ATTR_UID);

@@ -36,8 +36,15 @@ attributetype ( 1.3.6.1.4.1.20971.10.1.4 NAME 'apacheTTL'
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
 	SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.20971.10.1.5 NAME 'apacheUser'
+	DESC 'Apache ITK MPM User name under which request is served'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
 objectclass ( 1.3.6.1.4.1.20971.10.2.1 NAME 'apacheConfiguration'
         DESC 'mod_vhost_ldapx Apache dynamic virtual hosting schema'
         SUP 'top' AUXILIARY
         MUST ( apacheServerName $ apacheDocumentRoot )
-        MAY ( apacheServerAdmin $ apacheTTL $ uid $ uidNumber $ gidNumber ) )
+        MAY ( apacheServerAdmin $ apacheUser $ apacheTTL $ uid $ uidNumber $ gidNumber ) )
