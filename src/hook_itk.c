@@ -27,6 +27,8 @@
 #define ITK_MODULE_NAME "mpm_itk.c"
 
 int vhx_hook_itk(request_rec *r) {
+	if(r->hostname == NULL) return OK;
+
 	vhx_settings_t *settings = (vhx_settings_t *) ap_get_module_config(r->server->module_config, &vhost_ldapx_module);
 	if (!settings->enable) {
 		VHX_INFO(r->server, "VHX Disabled %s", r->hostname);

@@ -23,6 +23,8 @@
 
 
 int vhx_hook_vhost(request_rec *r) {
+	if(r->hostname == NULL) return DECLINED;
+
 	vhx_settings_t *settings = (vhx_settings_t *) ap_get_module_config(r->server->module_config, &vhost_ldapx_module);
 	if (!settings->enable) {
 		VHX_INFO(r->server, "VirtualHost %s VHX disabled", r->hostname);

@@ -79,6 +79,7 @@ static int vhx_fill_user_info(vhx_request_t *v, uid_t uid, gid_t gid) {
 }
 
 vhx_request_t * vhx_config_get(vhx_settings_t *settings, request_rec *r) {
+	if(r->hostname == NULL) return NULL;
 
 	vhx_request_t *v;
 	if((v = vhx_cache_search(r->hostname)) != NULL) {
